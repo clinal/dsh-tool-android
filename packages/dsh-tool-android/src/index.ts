@@ -7,6 +7,8 @@
  */
 
 import type { Context } from '@deepseek-ai/cordis'
+import type {} from '@deepseek-ai/dsh-attachment'
+import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
 import { defineTool } from '@deepseek-ai/dsh-tools'
 import type { ValueSchemaSpec } from '@deepseek-ai/dsh-tools'
 // Type-only import: pulls the `Context.android` declaration merge and the
@@ -63,8 +65,49 @@ function renderCommand(value: CommandResult): string {
   return `exit code ${value.exitCode}${stdout ? `\n${stdout}` : ''}${stderr ? `\n${stderr}` : ''}`
 }
 
+/** Register the screenshot tool while durable attachment storage is available. */
+function applyScreenshotTool(ctx: Context): void {
+  ctx.tools.register(defineTool({
+    name: 'android_screenshot',
+    description: `Capture the current Android screen and return the PNG image itself. ${CONTROL_REQUIREMENT}`,
+    parameters: {},
+    output: {
+      schema: {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          attachmentId: { type: 'string', required: true },
+          mediaType: { type: 'string', required: true, enum: ['image/png'] },
+          bytes: { type: 'integer', required: true },
+          width: { type: 'integer', required: true },
+          height: { type: 'integer', required: true },
+          name: { type: 'string' },
+        },
+      },
+      render: (_args, value) => [
+        { type: 'text', text: `Captured Android screenshot: ${value.width}x${value.height} px, ${value.bytes} bytes.` },
+        { type: 'image', attachment: value as ImageAttachmentRef },
+      ],
+    },
+    timeoutMs: 120_000,
+    async execute(_args, exec) {
+      const screenshot = await withSignal(bridge(ctx).screenshot(), exec.signal)
+      const attachment = await ctx.attachments.saveImage({
+        data: Buffer.from(screenshot.base64, 'base64'),
+        mediaType: 'image/png',
+        name: 'android-screenshot.png',
+      })
+      if (attachment.mediaType !== 'image/png') {
+        throw new Error(`Android screenshot was stored as unexpected media type ${attachment.mediaType}`)
+      }
+      return { ...attachment, mediaType: attachment.mediaType }
+    },
+  }))
+}
+
 /** Register the `android_*` tools on `ctx.tools`; disposal unregisters them with the fiber. */
 export function apply(ctx: Context): void {
+  ctx.inject(['attachments'], applyScreenshotTool)
   ctx.tools.register(defineTool({
     name: 'android_status',
     description: 'Check the Android bridge state: whether the cordis-android host socket is connected and which instance this process runs in. Call this before other android_* tools to confirm device control is available.',
@@ -142,30 +185,6 @@ export function apply(ctx: Context): void {
     timeoutMs: 30_000,
     async execute(args, exec) {
       return withSignal(bridge(ctx).key(args.keyCode), exec.signal)
-    },
-  }))
-
-  ctx.tools.register(defineTool({
-    name: 'android_screenshot',
-    description: `Capture the current Android screen as a PNG screenshot. The base64 payload is returned in the tool result; the rendered text reports the capture size. ${CONTROL_REQUIREMENT}`,
-    parameters: {},
-    output: {
-      schema: {
-        type: 'object',
-        additionalProperties: false,
-        properties: {
-          mimeType: { type: 'string', required: true, enum: ['image/png'] },
-          base64: { type: 'string', required: true },
-        },
-      },
-      render: (_args, value) => [{
-        type: 'text',
-        text: `Captured Android screenshot: ${value.mimeType}, ${value.base64.length} base64 characters.`,
-      }],
-    },
-    timeoutMs: 120_000,
-    async execute(_args, exec) {
-      return withSignal(bridge(ctx).screenshot(), exec.signal)
     },
   }))
 
