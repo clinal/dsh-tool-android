@@ -1,0 +1,8 @@
+packages:
+  - packages/*
+
+nodeLinker: hoisted
+
+overrides:
+  node-pty: npm:@lydell/node-pty@1.2.0-beta.15
+  '@deepseek-ai/dsh-base>@deepseek-ai/dsh-subagent-claude-code': '-'

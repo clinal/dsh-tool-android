@@ -1,0 +1,73 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths: [packages/dsh-tool-android/package.json]
+  workflow_dispatch:
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.version.outputs.changed }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: version
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          package_json=packages/dsh-tool-android/package.json
+          version=$(jq -r .version "$package_json")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event_name }}" = workflow_dispatch ]; then
+            changed=true
+          elif ! git cat-file -e "$BEFORE_SHA:$package_json" 2>/dev/null; then
+            changed=true
+          else
+            previous=$(git show "$BEFORE_SHA:$package_json" | jq -r .version)
+            test "$version" != "$previous" && changed=true || changed=false
+          fi
+          if [ "$changed" = true ] && git ls-remote --exit-code --tags origin "refs/tags/v$version"; then
+            echo "Tag v$version already exists" >&2
+            exit 1
+          fi
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+
+  release:
+    needs: prepare
+    if: needs.prepare.outputs.changed == 'true'
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm run typecheck
+      - run: pnpm run build
+      - name: Package
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          archive="dist/dsh-tool-android-aarch64-${RELEASE_VERSION}.zip"
+          zip -q -r -y "$archive" . \
+            -x '.git/*' \
+            -x 'dist/*' \
+            -x 'node_modules/.cache/*' \
+            -x '*.tsbuildinfo'
+      - run: gh release create "v$RELEASE_VERSION" dist/*.zip --target "$GITHUB_SHA" --generate-notes

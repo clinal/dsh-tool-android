@@ -1,0 +1,20 @@
+{
+  "name": "@deepseek-ai/dsh-tool-android-workspace",
+  "version": "0.0.1",
+  "private": true,
+  "packageManager": "pnpm@10.15.0",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "scripts": {
+    "build": "pnpm --filter dsh-tool-android build",
+    "typecheck": "pnpm --filter dsh-tool-android typecheck",
+    "check": "pnpm run typecheck && pnpm run build",
+    "start": "DSH_HOME=$PWD/.dsh node --expose-internals ./node_modules/@deepseek-ai/dsh/lib/bin.js web --patch ./android.cordis.yml"
+  },
+  "dependencies": {
+    "@deepseek-ai/dsh": "0.1.0-rc.6",
+    "cordis-plugin-android": "^0.0.6",
+    "dsh-tool-android": "workspace:*"
+  }
+}

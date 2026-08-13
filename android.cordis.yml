@@ -1,0 +1,21 @@
+# Android host profile: the host supplies device control, so local sandbox and
+# persistent PTY facilities are deliberately disabled.
+- id: sandbox
+  disabled: true
+- id: sandbox-policy
+  disabled: true
+- id: bash-sandbox
+  disabled: true
+- id: fs-sandbox
+  disabled: true
+- id: permission
+  disabled: true
+- insert:
+    - id: bash-local
+      name: '@deepseek-ai/dsh-bash-local'
+    - id: fs-local
+      name: '@deepseek-ai/dsh-fs-local'
+    - id: android
+      name: cordis-plugin-android
+    - id: tool-android
+      name: dsh-tool-android
