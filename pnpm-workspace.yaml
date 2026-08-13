@@ -2,6 +2,7 @@ packages:
   - packages/*
 
 nodeLinker: hoisted
+verifyDepsBeforeRun: false
 
 overrides:
   node-pty: npm:@lydell/node-pty@1.2.0-beta.15
