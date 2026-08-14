@@ -21,14 +21,12 @@ jobs:
       - name: Package
         run: |
           set -euo pipefail
-          mkdir -p dist
-          archive="dist/dsh-tool-android-aarch64-${GITHUB_SHA}.tar.gz"
-          tar -czf "$archive" \
-            --exclude='.git' \
-            --exclude='dist' \
-            --exclude='node_modules/.cache' \
-            --exclude='*.tsbuildinfo' \
-            .
+          archive="dsh-tool-android-aarch64-${GITHUB_SHA}.tar.gz"
+          rm -rf .git dist node_modules/.cache
+          find . -name '*.tsbuildinfo' -delete
+          tar -czf "$RUNNER_TEMP/$archive" .
+          mkdir dist
+          mv "$RUNNER_TEMP/$archive" dist/
       - uses: actions/upload-artifact@v4
         with:
           name: dsh-tool-android-aarch64
