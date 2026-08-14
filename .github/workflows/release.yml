@@ -64,9 +64,7 @@ jobs:
         run: |
           set -euo pipefail
           archive="dsh-tool-android-aarch64-${RELEASE_VERSION}.tar.gz"
-          rm -rf .git dist node_modules/.cache
+          rm -rf .git node_modules/.cache
           find . -name '*.tsbuildinfo' -delete
           tar -czf "$RUNNER_TEMP/$archive" .
-          mkdir dist
-          mv "$RUNNER_TEMP/$archive" dist/
-      - run: gh release create "v$RELEASE_VERSION" dist/*.tar.gz --target "$GITHUB_SHA" --generate-notes
+      - run: gh release create "v$RELEASE_VERSION" "$RUNNER_TEMP/dsh-tool-android-aarch64-${RELEASE_VERSION}.tar.gz" --target "$GITHUB_SHA" --generate-notes

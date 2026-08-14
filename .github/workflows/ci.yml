@@ -22,13 +22,11 @@ jobs:
         run: |
           set -euo pipefail
           archive="dsh-tool-android-aarch64-${GITHUB_SHA}.tar.gz"
-          rm -rf .git dist node_modules/.cache
+          rm -rf .git node_modules/.cache
           find . -name '*.tsbuildinfo' -delete
           tar -czf "$RUNNER_TEMP/$archive" .
-          mkdir dist
-          mv "$RUNNER_TEMP/$archive" dist/
       - uses: actions/upload-artifact@v4
         with:
           name: dsh-tool-android-aarch64
-          path: dist/*.tar.gz
+          path: ${{ runner.temp }}/dsh-tool-android-aarch64-${{ github.sha }}.tar.gz
           if-no-files-found: error
