@@ -67,4 +67,4 @@ jobs:
           rm -rf .git node_modules/.cache
           find . -name '*.tsbuildinfo' -delete
           tar -czf "$RUNNER_TEMP/$archive" .
-      - run: gh release create "v$RELEASE_VERSION" "$RUNNER_TEMP/dsh-tool-android-aarch64-${RELEASE_VERSION}.tar.gz" --target "$GITHUB_SHA" --generate-notes
+      - run: gh release create "v$RELEASE_VERSION" "$RUNNER_TEMP/dsh-tool-android-aarch64-${RELEASE_VERSION}.tar.gz" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --generate-notes
