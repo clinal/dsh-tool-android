@@ -2,6 +2,9 @@
 
 Android device tools for DeepSeek Harness, backed by `cordis-plugin-android`.
 
+`android_screenshot` stores the captured PNG through DSH's attachment service and returns a native
+image content block, so image-capable models receive the screenshot itself instead of base64 text.
+
 The publishable `dsh-tool-android` package is the
 `packages/dsh-tool-android` workspace member.
 
