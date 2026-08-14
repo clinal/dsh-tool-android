@@ -64,10 +64,11 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist
-          archive="dist/dsh-tool-android-aarch64-${RELEASE_VERSION}.zip"
-          zip -q -r -y "$archive" . \
-            -x '.git/*' \
-            -x 'dist/*' \
-            -x 'node_modules/.cache/*' \
-            -x '*.tsbuildinfo'
-      - run: gh release create "v$RELEASE_VERSION" dist/*.zip --target "$GITHUB_SHA" --generate-notes
+          archive="dist/dsh-tool-android-aarch64-${RELEASE_VERSION}.tar.gz"
+          tar -czf "$archive" \
+            --exclude='.git' \
+            --exclude='dist' \
+            --exclude='node_modules/.cache' \
+            --exclude='*.tsbuildinfo' \
+            .
+      - run: gh release create "v$RELEASE_VERSION" dist/*.tar.gz --target "$GITHUB_SHA" --generate-notes

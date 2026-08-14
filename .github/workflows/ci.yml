@@ -22,14 +22,15 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist
-          archive="dist/dsh-tool-android-aarch64-${GITHUB_SHA}.zip"
-          zip -q -r -y "$archive" . \
-            -x '.git/*' \
-            -x 'dist/*' \
-            -x 'node_modules/.cache/*' \
-            -x '*.tsbuildinfo'
+          archive="dist/dsh-tool-android-aarch64-${GITHUB_SHA}.tar.gz"
+          tar -czf "$archive" \
+            --exclude='.git' \
+            --exclude='dist' \
+            --exclude='node_modules/.cache' \
+            --exclude='*.tsbuildinfo' \
+            .
       - uses: actions/upload-artifact@v4
         with:
           name: dsh-tool-android-aarch64
-          path: dist/*.zip
+          path: dist/*.tar.gz
           if-no-files-found: error
