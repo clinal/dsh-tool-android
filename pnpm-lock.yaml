@@ -16,8 +16,8 @@ importers:
         specifier: 0.1.0-rc.6
         version: 0.1.0-rc.6(c940fda7be16b60a86b0f41628823edb)
       cordis-plugin-android:
-        specifier: ^0.0.6
-        version: 0.0.6(cordis@4.0.0-rc.8)
+        specifier: ^0.0.7
+        version: 0.0.7(cordis@4.0.0-rc.8)
       dsh-tool-android:
         specifier: workspace:*
         version: link:packages/dsh-tool-android
@@ -28,8 +28,8 @@ importers:
         specifier: ^0.0.1-rc.1
         version: 0.0.1-rc.5(8f6a1bc9fddc84da27c05eade8a62f64)
       cordis-plugin-android:
-        specifier: ^0.0.6
-        version: 0.0.6(cordis@4.0.0-rc.8)
+        specifier: ^0.0.7
+        version: 0.0.7(cordis@4.0.0-rc.8)
     devDependencies:
       '@deepseek-ai/cordis':
         specifier: ^4.0.1-rc.1
@@ -4642,8 +4642,8 @@ packages:
     resolution: {integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==}
     engines: {node: '>= 0.6'}
 
-  cordis-plugin-android@0.0.6:
-    resolution: {integrity: sha512-NAM2aTa4Sxd4Fr8Yg3Swq5dWlzclhYWOyAW3DXpAt2tdYmsMYbGyFJ2sbWEajOhd5DN9FNaeuSo4CpvNhcXklQ==}
+  cordis-plugin-android@0.0.7:
+    resolution: {integrity: sha512-blGdD74i+5eT3Mp1+U4qAPNn0DeDfiSKMXKYO8qhZR8eb5nhuVJck6jo6j1lrzodfeks+qeuW3CHVuYwRmIqkg==}
     peerDependencies:
       '@cordisjs/plugin-webui': ^0.8.2
       cordis: ^4.0.0-rc.7
@@ -12448,7 +12448,7 @@ snapshots:
 
   cookie@0.7.2: {}
 
-  cordis-plugin-android@0.0.6(cordis@4.0.0-rc.8):
+  cordis-plugin-android@0.0.7(cordis@4.0.0-rc.8):
     dependencies:
       cordis: 4.0.0-rc.8
 

@@ -1,7 +1,7 @@
 {
   "name": "dsh-tool-android",
   "description": "Android device tools for DeepSeek Harness",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": true,
   "type": "module",
   "main": "lib/index.js",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@deepseek-ai/dsh": "^0.0.1-rc.1",
-    "cordis-plugin-android": "^0.0.6"
+    "cordis-plugin-android": "^0.0.7"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1-rc.1",
