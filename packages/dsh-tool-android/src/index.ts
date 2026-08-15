@@ -189,6 +189,28 @@ export function apply(ctx: Context): void {
   }))
 
   ctx.tools.register(defineTool({
+    name: 'android_toast',
+    description: 'Show a native toast message in the Android app.',
+    parameters: {
+      content: { type: 'string', required: true, description: 'Text to show in the toast.' },
+      duration: { type: 'string', enum: ['short', 'long'], description: 'How long to show the toast (default short).' },
+    },
+    output: {
+      schema: {
+        type: 'object',
+        additionalProperties: false,
+        properties: {},
+      },
+      render: args => [{ type: 'text', text: `Showed Android toast: ${args.content}` }],
+    },
+    timeoutMs: 30_000,
+    async execute(args, exec) {
+      await withSignal(bridge(ctx).toast(args.content, args.duration), exec.signal)
+      return {}
+    },
+  }))
+
+  ctx.tools.register(defineTool({
     name: 'android_device_info',
     description: `Read the Android device screen size, density, and current foreground package. ${CONTROL_REQUIREMENT}`,
     parameters: {},

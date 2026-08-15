@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@deepseek-ai/dsh": "0.1.0-rc.6",
-    "cordis-plugin-android": "^0.0.6",
+    "cordis-plugin-android": "^0.0.7",
     "dsh-tool-android": "workspace:*"
   }
 }
