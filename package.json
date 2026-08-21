@@ -13,7 +13,7 @@
     "start": "DSH_HOME=$PWD/.dsh node --expose-internals ./node_modules/@deepseek-ai/dsh/lib/bin.js web --patch ./android.cordis.yml"
   },
   "dependencies": {
-    "@deepseek-ai/dsh": "0.1.0-rc.6",
+    "@deepseek-ai/dsh": "0.1.1-rc.1",
     "cordis-plugin-android": "^0.0.7",
     "dsh-tool-android": "workspace:*"
   }
