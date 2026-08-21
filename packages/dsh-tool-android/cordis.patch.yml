@@ -1,3 +1,11 @@
+- id: attachment-local
+  name: '@deepseek-ai/dsh-attachment-local'
+  config:
+    maxImageBytes: 33554432
+    maxImagesPerMessage: 600
+    maxMessageImageBytes: 67108864
+    maxImagePixels: 67108864
+    maxImageDimension: 8192
 - insert:
     - id: tool-android
       name: dsh-tool-android

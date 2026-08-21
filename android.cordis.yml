@@ -10,6 +10,14 @@
   disabled: true
 - id: permission
   disabled: true
+- id: attachment-local
+  name: '@deepseek-ai/dsh-attachment-local'
+  config:
+    maxImageBytes: 33554432
+    maxImagesPerMessage: 600
+    maxMessageImageBytes: 67108864
+    maxImagePixels: 67108864
+    maxImageDimension: 8192
 - insert:
     - id: bash-local
       name: '@deepseek-ai/dsh-bash-local'
